@@ -1,0 +1,71 @@
+
+.vc-profile-page {
+  background: #f8f9fc;
+  min-height: calc(100vh - 72px - 200px);
+}
+
+.vc-profile-card {
+  background: #fff; border-radius: 20px;
+  padding: 32px 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  position: sticky; top: 100px;
+}
+
+.vc-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; color: #fff;
+  background: linear-gradient(135deg, #4dc4e6, #5dbea3);
+}
+
+.vc-avatar-vet {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.vc-profile-name { font-size: 1.15rem; font-weight: 800; color: #1a1a2e; letter-spacing: -0.02em; margin-bottom: 8px; }
+
+.vc-role-badge { display: inline-flex; align-items: center; font-size: 0.78rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; }
+.vc-role-badge.vet { background: #e8faf0; color: #22c55e; }
+
+.vc-info-list { display: flex; flex-direction: column; gap: 10px; }
+.vc-info-row  { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; color: #4a4a6a; }
+.vc-info-row i { color: #22c55e; font-size: 0.95rem; width: 16px; }
+
+.vc-btn-edit {
+  background: #e8faf0; color: #22c55e;
+  border: 1.5px solid #22c55e; font-weight: 600;
+  font-size: 0.875rem; border-radius: 10px; padding: 9px;
+  transition: background 0.2s;
+}
+.vc-btn-edit:hover { background: #22c55e; color: #fff; }
+
+.vc-btn-logout {
+  background: #fff5f5; color: #dc2626;
+  border: 1.5px solid #fecaca; font-weight: 600;
+  font-size: 0.875rem; border-radius: 10px; padding: 9px;
+  transition: background 0.2s;
+}
+.vc-btn-logout:hover { background: #dc2626; color: #fff; }
+
+.vc-panel { background: #fff; border-radius: 20px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+.vc-panel-title { font-size: 1rem; font-weight: 800; color: #1a1a2e; letter-spacing: -0.02em; }
+
+.vc-alert-success {
+  background: #f0fdf4; border: 1px solid #bbf7d0;
+  color: #16a34a; border-radius: 10px; font-size: 0.875rem; padding: 10px 14px;
+}
+
+.vc-label { font-size: 0.82rem; font-weight: 700; color: #4a4a6a; margin-bottom: 6px; display: block; }
+.vc-input-wrap { position: relative; }
+.vc-input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #a0a8c0; font-size: 0.95rem; pointer-events: none; }
+.vc-input { padding-left: 40px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 0.9rem; height: 46px; color: #1a1a2e; transition: border-color 0.2s, box-shadow 0.2s; }
+.vc-input:focus { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.12); outline: none; }
+
+.vc-btn-save { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; font-weight: 700; font-size: 0.875rem; padding: 10px 24px; border-radius: 10px; border: none; transition: opacity 0.2s; }
+.vc-btn-save:hover:not(:disabled) { opacity: 0.9; color: #fff; }
+.vc-btn-save:disabled { opacity: 0.65; }
+
+.vc-btn-cancel { background: #f8f9fc; color: #7a82a0; border: 1.5px solid #e2e8f0; font-weight: 600; font-size: 0.875rem; padding: 10px 24px; border-radius: 10px; }
+
+.vc-summary-item { background: #f8f9fc; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 2px; }
+.vc-summary-label { font-size: 0.75rem; color: #a0a8c0; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+.vc-summary-value { font-size: 0.9rem; color: #1a1a2e; font-weight: 600; }

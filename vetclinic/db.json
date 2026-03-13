@@ -1,0 +1,366 @@
+{
+  "user": [
+    {
+      "id": 1,
+      "name": "Carlos Mendoza",
+      "user": "cmendoza",
+      "email": "carlos.mendoza@email.com",
+      "num": "987654321",
+      "createdAt": "2024-01-15T08:00:00"
+    },
+    {
+      "id": 2,
+      "name": "Ana Torres",
+      "user": "atorres",
+      "email": "ana.torres@email.com",
+      "num": "976543210",
+      "createdAt": "2024-01-20T09:00:00"
+    },
+    {
+      "id": 3,
+      "name": "Dr. Luis Paredes",
+      "user": "lparedes",
+      "email": "luis.paredes@vetclinic.com",
+      "num": "965432109",
+      "createdAt": "2024-01-10T07:00:00"
+    },
+    {
+      "id": 4,
+      "name": "Dra. Sofia Quispe",
+      "user": "squispe",
+      "email": "sofia.quispe@vetclinic.com",
+      "num": "954321098",
+      "createdAt": "2024-01-10T07:30:00"
+    },
+    {
+      "id": 5,
+      "name": "Maria Villanueva",
+      "user": "mvillanueva",
+      "email": "maria.villanueva@email.com",
+      "num": "943210987",
+      "createdAt": "2024-02-01T10:00:00"
+    },
+    {
+      "name": "Veterinario 3",
+      "user": "Ve3",
+      "email": "ve3@vetclinic.com",
+      "num": "912312323",
+      "createdAt": "2026-03-12T22:35:58.105Z",
+      "id": 6
+    },
+    {
+      "name": "dueño",
+      "user": "123",
+      "email": "eduardo25049@gmail.com",
+      "num": "asd",
+      "createdAt": "2026-03-12T23:01:58.680Z",
+      "id": 7
+    }
+  ],
+  "roles": [
+    {
+      "id": 1,
+      "rol_name": "Owner",
+      "description": "Dueno de mascota"
+    },
+    {
+      "id": 2,
+      "rol_name": "Vet",
+      "description": "Veterinario de la clinica"
+    }
+  ],
+  "userRoles": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "rol_id": 1
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "rol_id": 1
+    },
+    {
+      "id": 3,
+      "user_id": 3,
+      "rol_id": 2
+    },
+    {
+      "id": 4,
+      "user_id": 4,
+      "rol_id": 2
+    },
+    {
+      "id": 5,
+      "user_id": 5,
+      "rol_id": 1
+    },
+    {
+      "user_id": 6,
+      "rol_id": 2,
+      "id": 6
+    },
+    {
+      "user_id": 7,
+      "rol_id": 1,
+      "id": 7
+    }
+  ],
+  "ownerProfiles": [
+    {
+      "id": 1,
+      "user_id": 1,
+      "payment_method_prefer": "card"
+    },
+    {
+      "id": 2,
+      "user_id": 2,
+      "payment_method_prefer": "cash"
+    },
+    {
+      "id": 3,
+      "user_id": 5,
+      "payment_method_prefer": "card"
+    },
+    {
+      "user_id": 7,
+      "payment_method_prefer": "cash",
+      "id": 4
+    }
+  ],
+  "veterinarianProfiles": [
+    {
+      "id": 1,
+      "user_id": 3,
+      "license_number": "VET-2019-0341",
+      "specialty": "Cirugia, Medicina General",
+      "availability_start": "07:00",
+      "availability_end": "17:00"
+    },
+    {
+      "id": 2,
+      "user_id": 4,
+      "license_number": "VET-2020-0892",
+      "specialty": "Dermatologia, Nutricion"
+    },
+    {
+      "user_id": 6,
+      "license_number": "VET-1222-122",
+      "specialty": "ASDASD",
+      "id": 3
+    }
+  ],
+  "pets": [
+    {
+      "id": 1,
+      "name": "Rocky",
+      "species": "dog",
+      "breed": "Labrador",
+      "birth_date": "2020-03-10",
+      "owner_id": 1
+    },
+    {
+      "id": 2,
+      "name": "Luna",
+      "species": "cat",
+      "breed": "Siames",
+      "birth_date": "2021-07-22",
+      "owner_id": 1
+    },
+    {
+      "id": 3,
+      "name": "Nube",
+      "species": "bunny",
+      "breed": "Angora",
+      "birth_date": "2022-11-05",
+      "owner_id": 2
+    },
+    {
+      "id": 4,
+      "name": "Max",
+      "species": "dog",
+      "breed": "Golden Retriever",
+      "birth_date": "2019-05-18",
+      "owner_id": 3
+    },
+    {
+      "id": 5,
+      "name": "Mochi",
+      "species": "cat",
+      "breed": "Persa",
+      "birth_date": "2023-01-30",
+      "owner_id": 2
+    },
+    {
+      "name": "pepe",
+      "breed": "Siamés",
+      "birth_date": "2026-03-12",
+      "species": "cat",
+      "owner_id": 4,
+      "id": 6
+    }
+  ],
+  "appointments": [
+    {
+      "id": 1,
+      "pet_id": 1,
+      "veterinarian_id": 1,
+      "datetime": "2025-06-10T09:00:00",
+      "duration_minutes": 30,
+      "status": "completed",
+      "reason": "Control anual"
+    },
+    {
+      "id": 2,
+      "pet_id": 2,
+      "veterinarian_id": 2,
+      "datetime": "2025-06-12T10:30:00",
+      "duration_minutes": 45,
+      "status": "completed",
+      "reason": "Problema de piel"
+    },
+    {
+      "id": 3,
+      "pet_id": 3,
+      "veterinarian_id": 1,
+      "datetime": "2025-06-20T11:00:00",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "Vacunacion"
+    },
+    {
+      "id": 4,
+      "pet_id": 4,
+      "veterinarian_id": 2,
+      "datetime": "2026-03-12T21:14",
+      "duration_minutes": 60,
+      "status": "scheduled",
+      "reason": "Revision post operatoria"
+    },
+    {
+      "id": 5,
+      "pet_id": 5,
+      "veterinarian_id": 1,
+      "datetime": "2025-06-25T09:30:00",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "Primera consulta"
+    },
+    {
+      "id": 6,
+      "pet_id": 1,
+      "veterinarian_id": 2,
+      "datetime": "2025-07-01T10:00:00",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "Seguimiento nutricional"
+    },
+    {
+      "pet_id": 2,
+      "veterinarian_id": 2,
+      "datetime": "2026-03-12T14:55",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "asd",
+      "id": 7
+    },
+    {
+      "pet_id": 2,
+      "veterinarian_id": 1,
+      "datetime": "2026-03-13T14:55",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "asd",
+      "id": 8
+    },
+    {
+      "pet_id": 3,
+      "veterinarian_id": 2,
+      "datetime": "2026-03-21T14:55",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "hgh",
+      "id": 9
+    },
+    {
+      "pet_id": 3,
+      "veterinarian_id": 2,
+      "datetime": "2026-03-26T14:55",
+      "duration_minutes": 90,
+      "status": "scheduled",
+      "reason": "hgasdsa",
+      "id": 10
+    },
+    {
+      "pet_id": "4",
+      "veterinarian_id": 2,
+      "datetime": "2026-03-04T15:18",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "Se prueba",
+      "id": 11
+    },
+    {
+      "pet_id": 3,
+      "veterinarian_id": 2,
+      "datetime": "2026-03-12T15:20",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "motivoooo",
+      "id": 12
+    },
+    {
+      "pet_id": 3,
+      "veterinarian_id": 2,
+      "datetime": "2026-03-14T17:11",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "asd",
+      "id": 13
+    },
+    {
+      "pet_id": 4,
+      "veterinarian_id": 1,
+      "datetime": "2026-03-12T12:30",
+      "duration_minutes": 30,
+      "status": "scheduled",
+      "reason": "Mi Max está mal",
+      "id": 14
+    }
+  ],
+  "medicalRecords": [
+    {
+      "id": 1,
+      "pet_id": 1,
+      "veterinarian_id": 1,
+      "appointment_id": 1,
+      "record_type": "scheduled",
+      "diagnosis": "Mascota en buen estado general",
+      "treatment": "Vitaminas mensuales",
+      "notes": "Peso ideal, vacunas al dia",
+      "created_at": "2025-06-10T09:35:00"
+    },
+    {
+      "id": 2,
+      "pet_id": 2,
+      "veterinarian_id": 2,
+      "appointment_id": 2,
+      "record_type": "scheduled",
+      "diagnosis": "Dermatitis alergica leve",
+      "treatment": "Shampoo medicado y antihistaminico",
+      "notes": "Revisar dieta, posible alergia alimentaria",
+      "created_at": "2025-06-12T11:20:00"
+    },
+    {
+      "pet_id": 3,
+      "veterinarian_id": 2,
+      "appointment_id": 13,
+      "record_type": "scheduled",
+      "diagnosis": "dasd",
+      "treatment": "asdsa",
+      "notes": "asdsad",
+      "created_at": "2026-03-12T22:11:22.233Z",
+      "id": 4
+    }
+  ]
+}

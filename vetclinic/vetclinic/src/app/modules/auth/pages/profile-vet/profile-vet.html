@@ -1,0 +1,236 @@
+<div class="vc-profile-page">
+  <div class="container py-5" *ngIf="authUser">
+    <div class="row justify-content-center gy-4">
+
+      <!-- Left card -->
+      <div class="col-12 col-lg-4">
+        <div class="vc-profile-card text-center">
+          <div class="vc-avatar vc-avatar-vet mx-auto mb-3">
+            <i class="bi bi-shield-plus"></i>
+          </div>
+          <h4 class="vc-profile-name">{{ authUser.user.name }}</h4>
+          <span class="vc-role-badge vet">
+            <i class="bi bi-shield-plus me-1"></i>Veterinario
+          </span>
+
+          <hr class="my-3" />
+
+          <div class="vc-info-list text-start">
+            <div class="vc-info-row">
+              <i class="bi bi-at"></i>
+              <span>{{ authUser.user.user }}</span>
+            </div>
+            <div class="vc-info-row">
+              <i class="bi bi-envelope"></i>
+              <span>{{ authUser.user.email }}</span>
+            </div>
+            <div class="vc-info-row">
+              <i class="bi bi-telephone"></i>
+              <span>{{ authUser.user.num }}</span>
+            </div>
+            <div class="vc-info-row" *ngIf="authUser.vetProfile?.license_number">
+              <i class="bi bi-card-text"></i>
+              <span>{{ authUser.vetProfile!.license_number }}</span>
+            </div>
+            <div class="vc-info-row" *ngIf="authUser.vetProfile?.specialty">
+              <i class="bi bi-stars"></i>
+              <span>{{ authUser.vetProfile!.specialty }}</span>
+            </div>
+            <div class="vc-info-row" *ngIf="authUser.vetProfile?.availability_start">
+              <i class="bi bi-clock"></i>
+              <span>{{ authUser.vetProfile!.availability_start }} – {{ authUser.vetProfile!.availability_end }}</span>
+            </div>
+            <div class="vc-info-row">
+              <i class="bi bi-calendar3"></i>
+              <span>Desde {{ authUser.user.createdAt | date:'MMM yyyy' }}</span>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column gap-2 mt-4">
+            <button class="btn vc-btn-edit" (click)="startEdit()" *ngIf="!isEditing && !isEditingSchedule">
+              <i class="bi bi-pencil me-2"></i>Editar perfil
+            </button>
+            <button class="btn vc-btn-edit" style="background: var(--vc-teal, #0d9488); border-color: var(--vc-teal, #0d9488);"
+              (click)="startEditSchedule()" *ngIf="!isEditing && !isEditingSchedule">
+              <i class="bi bi-clock me-2"></i>Configurar horario
+            </button>
+            <button class="btn vc-btn-logout" (click)="logout()">
+              <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div class="col-12 col-lg-8">
+
+        <div *ngIf="savedOk" class="alert vc-alert-success d-flex align-items-center gap-2 mb-4">
+          <i class="bi bi-check-circle-fill"></i>
+          <span>Cambios guardados correctamente.</span>
+        </div>
+
+        <!-- Edit profile form -->
+        <div class="vc-panel" *ngIf="isEditing">
+          <h5 class="vc-panel-title mb-4">
+            <i class="bi bi-pencil-square me-2"></i>Editar información
+          </h5>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label class="vc-label">Nombre completo</label>
+              <div class="vc-input-wrap">
+                <i class="bi bi-person vc-input-icon"></i>
+                <input type="text" class="form-control vc-input" [(ngModel)]="editName" name="editName" />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="vc-label">Teléfono</label>
+              <div class="vc-input-wrap">
+                <i class="bi bi-telephone vc-input-icon"></i>
+                <input type="tel" class="form-control vc-input" [(ngModel)]="editNum" name="editNum" />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="vc-label">Número de licencia</label>
+              <div class="vc-input-wrap">
+                <i class="bi bi-card-text vc-input-icon"></i>
+                <input type="text" class="form-control vc-input" placeholder="VET-XXXX-XXXX"
+                  [(ngModel)]="editLicense" name="editLicense" />
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label class="vc-label">Especialidad</label>
+              <div class="vc-input-wrap">
+                <i class="bi bi-stars vc-input-icon"></i>
+                <input type="text" class="form-control vc-input" placeholder="Ej: Cirugía, Nutrición"
+                  [(ngModel)]="editSpecialty" name="editSpecialty" />
+              </div>
+            </div>
+          </div>
+          <div class="d-flex gap-2 mt-4">
+            <button class="btn vc-btn-save" (click)="saveChanges()" [disabled]="isSaving">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isSaving" class="bi bi-check-lg me-2"></i>
+              {{ isSaving ? 'Guardando...' : 'Guardar cambios' }}
+            </button>
+            <button class="btn vc-btn-cancel" (click)="cancelEdit()">Cancelar</button>
+          </div>
+        </div>
+
+        <!-- Edit schedule form -->
+        <div class="vc-panel" *ngIf="isEditingSchedule">
+          <h5 class="vc-panel-title mb-2">
+            <i class="bi bi-clock me-2"></i>Horario de disponibilidad
+          </h5>
+          <p class="text-muted small mb-4">
+            Define el rango horario en que los dueños podrán agendar citas contigo.
+          </p>
+          <div class="row g-3 align-items-end">
+            <div class="col-12 col-md-5">
+              <label class="vc-label">Hora de inicio</label>
+              <div class="vc-input-wrap">
+                <i class="bi bi-clock vc-input-icon"></i>
+                <select class="form-select vc-input" [(ngModel)]="editAvailStart" name="availStart">
+                  <option *ngFor="let t of timeOptions" [value]="t">{{ t }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-12 col-md-2 text-center pb-1">
+              <span class="fw-semibold text-muted">hasta</span>
+            </div>
+            <div class="col-12 col-md-5">
+              <label class="vc-label">Hora de fin</label>
+              <div class="vc-input-wrap">
+                <i class="bi bi-clock-fill vc-input-icon"></i>
+                <select class="form-select vc-input" [(ngModel)]="editAvailEnd" name="availEnd">
+                  <option *ngFor="let t of timeOptions" [value]="t">{{ t }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview slots -->
+          <div class="mt-4" *ngIf="editAvailStart && editAvailEnd && editAvailStart < editAvailEnd">
+            <p class="vc-label mb-2">Vista previa de slots (cada 30 min)</p>
+            <div class="d-flex flex-wrap gap-2">
+              <span
+                *ngFor="let slot of previewSlots"
+                class="badge rounded-pill px-3 py-2"
+                style="background: rgba(13,148,136,0.12); color: #0d9488; font-size: 0.8rem; font-weight: 600;">
+                {{ slot }}
+              </span>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-4">
+            <button class="btn vc-btn-save" (click)="saveSchedule()" [disabled]="isSaving">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isSaving" class="bi bi-check-lg me-2"></i>
+              {{ isSaving ? 'Guardando...' : 'Guardar horario' }}
+            </button>
+            <button class="btn vc-btn-cancel" (click)="cancelEditSchedule()">Cancelar</button>
+          </div>
+        </div>
+
+        <!-- Summary panel -->
+        <div class="vc-panel" *ngIf="!isEditing && !isEditingSchedule">
+          <h5 class="vc-panel-title mb-4">
+            <i class="bi bi-shield-check me-2"></i>Resumen de cuenta
+          </h5>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Nombre</span>
+                <span class="vc-summary-value">{{ authUser.user.name }}</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Usuario</span>
+                <span class="vc-summary-value">@{{ authUser.user.user }}</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Email</span>
+                <span class="vc-summary-value">{{ authUser.user.email }}</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Teléfono</span>
+                <span class="vc-summary-value">{{ authUser.user.num }}</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6" *ngIf="authUser.vetProfile">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Licencia</span>
+                <span class="vc-summary-value">{{ authUser.vetProfile.license_number || '—' }}</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6" *ngIf="authUser.vetProfile">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Especialidad</span>
+                <span class="vc-summary-value">{{ authUser.vetProfile.specialty || '—' }}</span>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="authUser.vetProfile?.availability_start">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Horario de atención</span>
+                <span class="vc-summary-value">
+                  {{ authUser.vetProfile!.availability_start }} – {{ authUser.vetProfile!.availability_end }}
+                </span>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="!authUser.vetProfile?.availability_start">
+              <div class="vc-summary-item">
+                <span class="vc-summary-label">Horario de atención</span>
+                <span class="vc-summary-value text-muted fst-italic">No configurado — haz clic en "Configurar horario"</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

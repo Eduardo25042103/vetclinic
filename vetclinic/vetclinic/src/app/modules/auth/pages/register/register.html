@@ -1,0 +1,103 @@
+<div class="vc-auth-page">
+  <div class="vc-auth-card">
+
+    <div class="vc-auth-header text-center mb-4">
+      <div class="vc-auth-icon mb-3">
+        <i class="bi bi-person-plus-fill"></i>
+      </div>
+      <h2 class="vc-auth-title">Crea tu cuenta</h2>
+      <p class="vc-auth-subtitle">Únete a VetClinic y cuida a tu mascota</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert vc-alert-error d-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-exclamation-circle-fill"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Role selector -->
+    <div class="mb-4">
+      <p class="vc-label mb-2">Tipo de cuenta</p>
+      <div class="row g-2">
+        <div *ngFor="let r of roles" class="col-6">
+          <div
+            class="vc-role-card"
+            [class.selected]="payload.role === r.value"
+            (click)="selectRole(r.value)"
+          >
+            <i [class]="'bi ' + r.icon + ' vc-role-icon'"></i>
+            <span class="vc-role-label">{{ r.label }}</span>
+            <span class="vc-role-desc">{{ r.desc }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" novalidate>
+
+      <div class="row g-3 mb-3">
+        <div class="col-12">
+          <label class="vc-label">Nombre completo</label>
+          <div class="vc-input-wrap">
+            <i class="bi bi-person vc-input-icon"></i>
+            <input type="text" class="form-control vc-input" placeholder="Tu nombre"
+              [(ngModel)]="payload.name" name="name" required />
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="vc-label">Nombre de usuario</label>
+          <div class="vc-input-wrap">
+            <i class="bi bi-at vc-input-icon"></i>
+            <input type="text" class="form-control vc-input" placeholder="usuario123"
+              [(ngModel)]="payload.username" name="username" required />
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="vc-label">Correo electrónico</label>
+          <div class="vc-input-wrap">
+            <i class="bi bi-envelope vc-input-icon"></i>
+            <input type="email" class="form-control vc-input" placeholder="tucorreo@email.com"
+              [(ngModel)]="payload.email" name="email" required />
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="vc-label">Teléfono</label>
+          <div class="vc-input-wrap">
+            <i class="bi bi-telephone vc-input-icon"></i>
+            <input type="tel" class="form-control vc-input" placeholder="987654321"
+              [(ngModel)]="payload.num" name="num" required />
+          </div>
+        </div>
+        <div class="col-12">
+          <label class="vc-label">Contraseña</label>
+          <div class="vc-input-wrap">
+            <i class="bi bi-lock vc-input-icon"></i>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              class="form-control vc-input vc-input-padded-right"
+              placeholder="Mínimo 8 caracteres"
+              [(ngModel)]="payload.password"
+              name="password"
+              required
+            />
+            <button type="button" class="vc-input-toggle" (click)="togglePassword()">
+              <i [class]="'bi ' + (showPassword ? 'bi-eye-slash' : 'bi-eye')"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn vc-btn-submit w-100" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!isLoading" class="bi bi-person-check me-2"></i>
+        {{ isLoading ? 'Creando cuenta...' : 'Crear cuenta' }}
+      </button>
+
+    </form>
+
+    <p class="vc-auth-footer text-center mt-4 mb-0">
+      ¿Ya tienes cuenta?
+      <a routerLink="/auth/login" class="vc-auth-link">Inicia sesión</a>
+    </p>
+
+  </div>
+</div>

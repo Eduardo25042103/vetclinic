@@ -1,0 +1,230 @@
+<div class="vc-appts-page">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-8">
+
+        <button class="btn vc-btn-back mb-4" (click)="goBack()">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </button>
+
+        <div class="vc-panel">
+
+          <div class="text-center mb-4">
+            <div class="vc-form-icon mx-auto mb-3">
+              <i class="bi bi-calendar-plus-fill"></i>
+            </div>
+            <h4 class="vc-panel-title">
+              {{ isEditMode ? 'Editar cita' : 'Nueva cita' }}
+            </h4>
+            <p class="vc-page-subtitle mb-0">
+              {{ isEditMode ? 'Modifica los datos de la cita' : 'Agenda una cita para tu mascota' }}
+            </p>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert vc-alert-error d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div *ngIf="isLoading" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+
+          <form *ngIf="!isLoading" (ngSubmit)="onSubmit()" novalidate>
+            <div class="row g-3">
+
+              <!-- Mascota -->
+              <div class="col-12 col-md-6">
+                <label class="vc-label">Mascota</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-heart-pulse vc-input-icon"></i>
+                  <select class="form-select vc-input" [(ngModel)]="petId" name="petId" required>
+                    <option [value]="0" disabled>Selecciona una mascota</option>
+                    <option *ngFor="let pet of pets" [value]="pet.id">
+                      {{ pet.name }} · {{ pet.breed }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Veterinario -->
+              <div class="col-12 col-md-6">
+                <label class="vc-label">Veterinario</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-person-badge vc-input-icon"></i>
+                  <select class="form-select vc-input" [(ngModel)]="veterinarianId" name="vetId" required
+                    (ngModelChange)="onVetChange()">
+                    <option [value]="0" disabled>Selecciona un veterinario</option>
+                    <option *ngFor="let v of vetOptions" [value]="v.veterinarian_id">
+                      {{ v.name }} — {{ v.specialty }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- ══ OWNER FLOW: Visual Calendar ══ -->
+              <ng-container *ngIf="isOwner && veterinarianId">
+
+                <!-- No schedule warning -->
+                <div class="col-12" *ngIf="!selectedVet?.availability_start">
+                  <div class="vc-no-schedule-alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Este veterinario aún no ha configurado su horario de atención.
+                  </div>
+                </div>
+
+                <!-- Calendar -->
+                <div class="col-12" *ngIf="selectedVet?.availability_start">
+
+                  <!-- Vet info bar -->
+                  <div class="vc-vet-info-bar mb-3">
+                    <i class="bi bi-clock me-2"></i>
+                    <strong>{{ selectedVet!.name }}</strong> atiende de
+                    <strong>{{ selectedVet!.availability_start }}</strong> a
+                    <strong>{{ selectedVet!.availability_end }}</strong>
+                    <span class="vc-vet-slots-note">· slots de 30 min</span>
+                  </div>
+
+                  <!-- Calendar widget -->
+                  <div class="vc-calendar">
+
+                    <!-- Month navigation -->
+                    <div class="vc-cal-header">
+                      <button type="button" class="vc-cal-nav" (click)="prevMonth()">
+                        <i class="bi bi-chevron-left"></i>
+                      </button>
+                      <span class="vc-cal-month-title">{{ calendarTitle }}</span>
+                      <button type="button" class="vc-cal-nav" (click)="nextMonth()">
+                        <i class="bi bi-chevron-right"></i>
+                      </button>
+                    </div>
+
+                    <!-- Weekday headers -->
+                    <div class="vc-cal-weekdays">
+                      <span *ngFor="let wd of weekDays" class="vc-cal-wd">{{ wd }}</span>
+                    </div>
+
+                    <!-- Day grid -->
+                    <div class="vc-cal-grid">
+                      <ng-container *ngFor="let week of calendarWeeks">
+                        <button
+                          *ngFor="let day of week"
+                          type="button"
+                          [class]="dayClass(day)"
+                          (click)="selectDay(day)"
+                          [title]="day.freeSlots + ' slots libres'"
+                        >
+                          <span class="cal-day-num">{{ day.dayNum }}</span>
+                          <span class="cal-day-dot" *ngIf="!day.isPast && !day.isOtherMonth && day.totalSlots > 0">
+                          </span>
+                        </button>
+                      </ng-container>
+                    </div>
+
+                    <!-- Legend -->
+                    <div class="vc-cal-legend">
+                      <span class="legend-item"><span class="legend-dot available"></span>Disponible</span>
+                      <span class="legend-item"><span class="legend-dot medium"></span>Pocas citas</span>
+                      <span class="legend-item"><span class="legend-dot low"></span>Casi lleno</span>
+                      <span class="legend-item"><span class="legend-dot full"></span>Completo</span>
+                    </div>
+
+                  </div><!-- /vc-calendar -->
+
+                  <!-- Selected day slots -->
+                  <div class="vc-slots-panel" *ngIf="selectedDate && daySlots.length > 0">
+                    <div class="vc-slots-header">
+                      <i class="bi bi-clock me-2"></i>
+                      Horarios para el <strong>{{ selectedDate | date:'EEEE d \'de\' MMMM':'':'es' }}</strong>
+                    </div>
+                    <div class="vc-slots-grid">
+                      <button
+                        *ngFor="let slot of daySlots"
+                        type="button"
+                        class="vc-slot-btn"
+                        [class.slot-booked]="slot.booked"
+                        [class.slot-selected]="selectedSlot === slot.time"
+                        [disabled]="slot.booked"
+                        (click)="onSlotSelect(slot)"
+                      >
+                        <i class="bi me-1"
+                          [class.bi-check-circle-fill]="selectedSlot === slot.time"
+                          [class.bi-x-circle]="slot.booked"
+                          [class.bi-clock]="!slot.booked && selectedSlot !== slot.time">
+                        </i>
+                        {{ slot.time }}
+                        <span *ngIf="slot.booked" class="slot-label">Ocupado</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Duration (only after slot selected) -->
+                  <div class="mt-3" *ngIf="selectedSlot">
+                    <label class="vc-label">Duración estimada</label>
+                    <div class="d-flex flex-wrap gap-2 mt-1">
+                      <button
+                        *ngFor="let d of durationOptions"
+                        type="button"
+                        class="btn vc-duration-btn"
+                        [class.selected]="durationMinutes === d"
+                        (click)="durationMinutes = d"
+                      >{{ d }} min</button>
+                    </div>
+                  </div>
+
+                </div>
+              </ng-container>
+
+              <!-- ══ VET FLOW: free datetime ══ -->
+              <ng-container *ngIf="!isOwner">
+                <div class="col-12 col-md-6">
+                  <label class="vc-label">Fecha y hora</label>
+                  <div class="vc-input-wrap">
+                    <i class="bi bi-calendar3 vc-input-icon"></i>
+                    <input type="datetime-local" class="form-control vc-input"
+                      [(ngModel)]="datetime" name="datetime" required />
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="vc-label">Duración</label>
+                  <div class="d-flex flex-wrap gap-2 mt-1">
+                    <button *ngFor="let d of durationOptions" type="button"
+                      class="btn vc-duration-btn" [class.selected]="durationMinutes === d"
+                      (click)="durationMinutes = d">{{ d }} min</button>
+                  </div>
+                </div>
+              </ng-container>
+
+              <!-- Motivo -->
+              <div class="col-12">
+                <label class="vc-label">Motivo de la consulta</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-chat-text vc-input-icon" style="top:16px;transform:none;"></i>
+                  <textarea class="form-control vc-input vc-textarea"
+                    placeholder="Describe el motivo de la consulta"
+                    [(ngModel)]="reason" name="reason" rows="3" required></textarea>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Selection summary chip -->
+            <div class="vc-selection-summary" *ngIf="selectedDate && selectedSlot">
+              <i class="bi bi-calendar-check me-2"></i>
+              Cita agendada para el
+              <strong>{{ selectedDate | date:'dd/MM/yyyy' }}</strong> a las
+              <strong>{{ selectedSlot }}</strong> · {{ durationMinutes }} min
+            </div>
+
+            <button type="submit" class="btn vc-btn-submit w-100 mt-4" [disabled]="isSaving">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isSaving" class="bi bi-check-lg me-2"></i>
+              {{ isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Agendar cita') }}
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

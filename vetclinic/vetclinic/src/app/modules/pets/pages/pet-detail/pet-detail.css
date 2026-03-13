@@ -1,0 +1,104 @@
+.vc-pets-page {
+  background: #f8f9fc;
+  min-height: calc(100vh - 72px - 200px);
+}
+
+.vc-btn-back {
+  background: #fff; color: #4a4a6a;
+  border: 1.5px solid #e2e8f0;
+  font-size: 0.875rem; font-weight: 600;
+  border-radius: 10px; padding: 8px 16px;
+  transition: background 0.2s;
+}
+.vc-btn-back:hover { background: #f0f9fc; color: #2ab4d4; border-color: #2ab4d4; }
+
+/* Detail card */
+.vc-detail-card {
+  background: #fff; border-radius: 20px;
+  overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border-top: 4px solid transparent;
+  position: sticky; top: 100px;
+}
+
+.vc-detail-card.species-dog   { border-top-color: #2ab4d4; }
+.vc-detail-card.species-cat   { border-top-color: #a78bfa; }
+.vc-detail-card.species-bunny { border-top-color: #22c55e; }
+
+.vc-detail-img-wrap {
+  height: 200px; background: #f0f9fc;
+  display: flex; align-items: center; justify-content: center;
+}
+.species-cat   .vc-detail-img-wrap { background: #f5f3ff; }
+.species-bunny .vc-detail-img-wrap { background: #f0fdf4; }
+
+.vc-detail-img { width: 100%; height: 100%; object-fit: cover; }
+
+.vc-detail-body { padding: 20px; }
+
+.vc-detail-name {
+  font-size: 1.4rem; font-weight: 800;
+  color: #1a1a2e; letter-spacing: -0.03em; margin-bottom: 8px;
+}
+
+.vc-detail-species-badge {
+  display: inline-block;
+  background: #f0f9fc; color: #2ab4d4;
+  font-size: 0.78rem; font-weight: 600;
+  padding: 4px 12px; border-radius: 20px;
+}
+.species-cat   .vc-detail-species-badge { background: #f5f3ff; color: #7c3aed; }
+.species-bunny .vc-detail-species-badge { background: #f0fdf4; color: #16a34a; }
+
+.vc-info-list { display: flex; flex-direction: column; gap: 10px; }
+.vc-info-row  { display: flex; align-items: center; gap: 10px; font-size: 0.875rem; color: #4a4a6a; }
+.vc-info-row i { color: #2ab4d4; width: 16px; }
+
+/* Action buttons */
+.vc-btn-edit-full {
+  background: #fef9ec; color: #f59e0b;
+  border: 1.5px solid #f59e0b; font-weight: 600;
+  font-size: 0.875rem; border-radius: 10px; padding: 9px;
+  transition: background 0.2s;
+}
+.vc-btn-edit-full:hover { background: #f59e0b; color: #fff; }
+
+.vc-btn-appt {
+  background: linear-gradient(135deg, #2ab4d4, #1a8fa8);
+  color: #fff; font-weight: 600; font-size: 0.875rem;
+  border-radius: 10px; padding: 9px; border: none;
+  transition: opacity 0.2s;
+}
+.vc-btn-appt:hover { opacity: 0.9; color: #fff; }
+
+.vc-btn-history {
+  background: #f0fdf4; color: #16a34a;
+  border: 1.5px solid #16a34a; font-weight: 600;
+  font-size: 0.875rem; border-radius: 10px; padding: 9px;
+  transition: background 0.2s;
+}
+.vc-btn-history:hover { background: #16a34a; color: #fff; }
+
+/* Panel */
+.vc-panel {
+  background: #fff; border-radius: 20px;
+  padding: 28px; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+.vc-panel-title { font-size: 1rem; font-weight: 800; color: #1a1a2e; }
+.vc-appt-count  { font-size: 0.8rem; color: #7a82a0; font-weight: 600; }
+
+.vc-empty-img { width: 100px; height: 100px; object-fit: contain; opacity: 0.35; border-radius: 12px; }
+
+/* Appointment rows */
+.vc-appt-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px; border-radius: 12px;
+  border: 1px solid #f0f0f5; margin-bottom: 10px;
+  transition: background 0.2s; flex-wrap: wrap;
+}
+.vc-appt-row:hover { background: #f8f9fc; }
+
+.vc-appt-date     { font-size: 0.8rem; color: #7a82a0; white-space: nowrap; min-width: 140px; }
+.vc-appt-info     { display: flex; flex-direction: column; flex: 1; gap: 2px; }
+.vc-appt-reason   { font-size: 0.875rem; font-weight: 600; color: #1a1a2e; }
+.vc-appt-duration { font-size: 0.75rem; color: #a0a8c0; }
+.vc-appt-status   { margin-left: auto; white-space: nowrap; }

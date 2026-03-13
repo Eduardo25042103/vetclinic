@@ -1,0 +1,115 @@
+<div class="vc-pets-page">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6">
+
+        <button class="btn vc-btn-back mb-4" (click)="goBack()">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </button>
+
+        <div class="vc-panel">
+
+          <!-- Header -->
+          <div class="text-center mb-4">
+            <div class="vc-form-icon mx-auto mb-3">
+              <i class="bi bi-plus-circle-fill"></i>
+            </div>
+            <h4 class="vc-panel-title">
+              {{ isEditMode ? 'Editar mascota' : 'Nueva mascota' }}
+            </h4>
+            <p class="vc-page-subtitle mb-0">
+              {{ isEditMode ? 'Actualiza los datos de tu mascota' : 'Registra a tu nueva mascota' }}
+            </p>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="errorMessage" class="alert vc-alert-error d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <!-- Loading -->
+          <div *ngIf="isLoading" class="text-center py-3">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+
+          <form *ngIf="!isLoading" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- Species selector -->
+            <div class="mb-4">
+              <label class="vc-label mb-2">Especie</label>
+              <div class="d-flex gap-2">
+                <div
+                  *ngFor="let opt of speciesOptions"
+                  class="vc-species-opt flex-fill"
+                  [class]="opt.color"
+                  [class.selected]="species === opt.value"
+                  (click)="selectSpecies(opt.value)"
+                >
+                  <i [class]="'bi ' + opt.icon + ' vc-species-opt-icon'"></i>
+                  <span class="vc-species-opt-label">{{ opt.label }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fields -->
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="vc-label">Nombre</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-heart vc-input-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control vc-input"
+                    placeholder="Nombre de tu mascota"
+                    [(ngModel)]="name"
+                    name="name"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="vc-label">Raza</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-tag vc-input-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control vc-input"
+                    placeholder="Ej: Labrador, Siamés"
+                    [(ngModel)]="breed"
+                    name="breed"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="vc-label">Fecha de nacimiento</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-calendar3 vc-input-icon"></i>
+                  <input
+                    type="date"
+                    class="form-control vc-input"
+                    [(ngModel)]="birthDate"
+                    name="birthDate"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="btn vc-btn-submit w-100 mt-4"
+              [disabled]="isSaving"
+            >
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isSaving" class="bi bi-check-lg me-2"></i>
+              {{ isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Registrar mascota') }}
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

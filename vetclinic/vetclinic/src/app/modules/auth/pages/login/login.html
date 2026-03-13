@@ -1,0 +1,79 @@
+<div class="vc-auth-page">
+  <div class="vc-auth-card">
+
+    <!-- Header -->
+    <div class="vc-auth-header text-center mb-4">
+      <div class="vc-auth-icon mb-3">
+        <i class="bi bi-heart-pulse-fill"></i>
+      </div>
+      <h2 class="vc-auth-title">Bienvenido de vuelta</h2>
+      <p class="vc-auth-subtitle">Ingresa a tu cuenta de VetClinic</p>
+    </div>
+
+    <!-- Error alert -->
+    <div *ngIf="errorMessage" class="alert vc-alert-error d-flex align-items-center gap-2 mb-3">
+      <i class="bi bi-exclamation-circle-fill"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm" novalidate>
+
+      <div class="vc-field mb-3">
+        <label class="vc-label">Correo electrónico</label>
+        <div class="vc-input-wrap">
+          <i class="bi bi-envelope vc-input-icon"></i>
+          <input
+            type="email"
+            class="form-control vc-input"
+            placeholder="tucorreo@email.com"
+            [(ngModel)]="credentials.email"
+            name="email"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="vc-field mb-4">
+        <label class="vc-label">Contraseña</label>
+        <div class="vc-input-wrap">
+          <i class="bi bi-lock vc-input-icon"></i>
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            class="form-control vc-input vc-input-padded-right"
+            placeholder="Tu contraseña"
+            [(ngModel)]="credentials.password"
+            name="password"
+            required
+          />
+          <button
+            type="button"
+            class="vc-input-toggle"
+            (click)="togglePassword()"
+            [attr.aria-label]="showPassword ? 'Ocultar' : 'Mostrar'"
+          >
+            <i [class]="'bi ' + (showPassword ? 'bi-eye-slash' : 'bi-eye')"></i>
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn vc-btn-submit w-100"
+        [disabled]="isLoading"
+      >
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+        <i *ngIf="!isLoading" class="bi bi-box-arrow-in-right me-2"></i>
+        {{ isLoading ? 'Ingresando...' : 'Iniciar sesión' }}
+      </button>
+
+    </form>
+
+    <!-- Footer -->
+    <p class="vc-auth-footer text-center mt-4 mb-0">
+      ¿No tienes cuenta?
+      <a routerLink="/auth/register" class="vc-auth-link">Regístrate aquí</a>
+    </p>
+
+  </div>
+</div>

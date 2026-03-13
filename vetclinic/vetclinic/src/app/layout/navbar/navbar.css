@@ -1,0 +1,116 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.vc-navbar {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 14px 0;
+  transition: box-shadow 0.3s ease, padding 0.3s ease;
+}
+
+.vc-navbar.scrolled {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  padding: 10px 0;
+}
+
+.vc-brand { text-decoration: none; user-select: none; }
+
+.vc-brand-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #4dc4e6 0%, #5dbea3 100%);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 18px; flex-shrink: 0;
+}
+
+.vc-brand-text {
+  font-size: 1.15rem; font-weight: 700;
+  color: #1a1a2e; letter-spacing: -0.02em;
+}
+
+.vc-nav-link {
+  display: flex; align-items: center; gap: 4px;
+  padding: 8px 14px; border-radius: 8px;
+  font-size: 0.9rem; font-weight: 500; color: #4a4a6a;
+  text-decoration: none; cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.vc-nav-link:hover { background: #f0f9fc; color: #2ab4d4; }
+
+.vc-chevron { font-size: 0.7rem; transition: transform 0.2s; }
+.vc-nav-link:hover .vc-chevron { transform: rotate(180deg); }
+
+.vc-user-greeting {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a4a6a;
+  white-space: nowrap;
+}
+
+.vc-btn-outline {
+  border: 1.5px solid #d0d5e8; color: #4a4a6a;
+  font-size: 0.875rem; font-weight: 500;
+  padding: 8px 20px; border-radius: 10px;
+  background: transparent;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.vc-btn-outline:hover { border-color: #2ab4d4; color: #2ab4d4; background: #f0f9fc; }
+
+.vc-btn-primary {
+  background: linear-gradient(135deg, #2ab4d4 0%, #1a8fa8 100%);
+  color: #fff; font-size: 0.875rem; font-weight: 600;
+  padding: 8px 20px; border-radius: 10px; border: none;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.vc-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); color: #fff; }
+
+.vc-btn-danger {
+  background: #fff5f5; color: #dc2626;
+  border: 1.5px solid #fecaca;
+  font-size: 0.875rem; font-weight: 600;
+  padding: 8px 20px; border-radius: 10px;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.vc-btn-danger:hover { background: #dc2626; color: #fff; border-color: #dc2626; }
+
+.vc-hamburger {
+  background: none; border: none;
+  font-size: 1.5rem; color: #4a4a6a;
+  padding: 4px 8px; cursor: pointer;
+  border-radius: 8px; transition: background 0.2s;
+}
+
+.vc-hamburger:hover { background: #f0f9fc; }
+
+.vc-mobile-menu {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.2s;
+}
+
+.vc-mobile-menu.open {
+  max-height: 500px;
+  padding-top: 12px; padding-bottom: 12px;
+  border-top: 1px solid #f0f0f5;
+  margin-top: 12px;
+}
+
+.vc-mobile-link {
+  display: block; padding: 10px 12px;
+  color: #4a4a6a; font-weight: 500; font-size: 0.95rem;
+  text-decoration: none; border-radius: 8px; cursor: pointer;
+  transition: background 0.2s;
+}
+
+.vc-mobile-link:hover { background: #f0f9fc; color: #2ab4d4; }

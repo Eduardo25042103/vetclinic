@@ -1,0 +1,134 @@
+<div class="vc-history-page">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-7">
+
+        <button class="btn vc-btn-back mb-4" (click)="goBack()">
+          <i class="bi bi-arrow-left me-2"></i>Volver
+        </button>
+
+        <div class="vc-panel">
+
+          <div class="text-center mb-4">
+            <div class="vc-form-icon mx-auto mb-3">
+              <i class="bi bi-clipboard2-plus-fill"></i>
+            </div>
+            <h4 class="vc-panel-title">
+              {{ isEditMode ? 'Editar registro' : 'Nuevo registro médico' }}
+            </h4>
+            <p class="vc-page-subtitle mb-0">
+              {{ isEditMode ? 'Modifica el registro médico' : 'Registra el diagnóstico y tratamiento' }}
+            </p>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert vc-alert-error d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-exclamation-circle-fill"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+
+          <div *ngIf="isLoading" class="text-center py-3">
+            <div class="spinner-border text-primary" role="status"></div>
+          </div>
+
+          <form *ngIf="!isLoading" (ngSubmit)="onSubmit()" novalidate>
+
+            <!-- Cita vinculada -->
+            <div *ngIf="appointmentId" class="vc-appt-linked mb-4 d-flex align-items-center gap-2">
+              <i class="bi bi-calendar2-check text-primary"></i>
+              <span>Registro vinculado a la cita <strong>#{{ appointmentId }}</strong></span>
+            </div>
+
+            <!-- Tipo de registro -->
+            <div class="mb-4">
+              <label class="vc-label mb-2">Tipo de consulta</label>
+              <div class="d-flex gap-2">
+                <div
+                  *ngFor="let opt of typeOptions"
+                  class="vc-type-opt flex-fill"
+                  [class]="opt.color"
+                  [class.selected]="recordType === opt.value"
+                  (click)="selectType(opt.value)"
+                >
+                  <i [class]="'bi ' + opt.icon + ' vc-type-opt-icon'"></i>
+                  <span class="vc-type-opt-label">{{ opt.label }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3">
+
+              <!-- Mascota -->
+              <div class="col-12">
+                <label class="vc-label">Mascota</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-heart-pulse vc-input-icon"></i>
+                  <select class="form-select vc-input" [(ngModel)]="petId" name="petId" required>
+                    <option [value]="0" disabled>Selecciona una mascota</option>
+                    <option *ngFor="let pet of pets" [value]="pet.id">
+                      {{ pet.name }} · {{ pet.breed }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Diagnóstico -->
+              <div class="col-12">
+                <label class="vc-label">Diagnóstico <span class="text-danger">*</span></label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-clipboard2 vc-input-icon" style="top: 14px; transform: none;"></i>
+                  <textarea
+                    class="form-control vc-input vc-textarea"
+                    placeholder="Describe el diagnóstico"
+                    [(ngModel)]="diagnosis"
+                    name="diagnosis"
+                    rows="3"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Tratamiento -->
+              <div class="col-12">
+                <label class="vc-label">Tratamiento <span class="text-danger">*</span></label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-capsule vc-input-icon" style="top: 14px; transform: none;"></i>
+                  <textarea
+                    class="form-control vc-input vc-textarea"
+                    placeholder="Describe el tratamiento indicado"
+                    [(ngModel)]="treatment"
+                    name="treatment"
+                    rows="3"
+                    required
+                  ></textarea>
+                </div>
+              </div>
+
+              <!-- Notas -->
+              <div class="col-12">
+                <label class="vc-label">Notas adicionales</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-chat-text vc-input-icon" style="top: 14px; transform: none;"></i>
+                  <textarea
+                    class="form-control vc-input vc-textarea"
+                    placeholder="Observaciones opcionales"
+                    [(ngModel)]="notes"
+                    name="notes"
+                    rows="2"
+                  ></textarea>
+                </div>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn vc-btn-submit w-100 mt-4" [disabled]="isSaving">
+              <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isSaving" class="bi bi-check-lg me-2"></i>
+              {{ isSaving ? 'Guardando...' : (isEditMode ? 'Guardar cambios' : 'Crear registro') }}
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

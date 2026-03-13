@@ -1,0 +1,48 @@
+<footer class="vc-footer">
+  <div class="container py-5">
+    <div class="row gy-4">
+
+      <div class="col-12 col-md-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+          <div class="vc-footer-icon">
+            <i class="bi bi-heart-pulse-fill"></i>
+          </div>
+          <span class="vc-footer-brand">{{ brandName }}</span>
+        </div>
+        <p class="vc-footer-tagline">{{ tagline }}</p>
+        <div class="d-flex gap-2 mt-3">
+          <a
+            *ngFor="let s of socialLinks"
+            [href]="s.href"
+            [attr.aria-label]="s.label"
+            class="vc-social-btn"
+            target="_blank"
+            rel="noopener"
+          >
+            <i [class]="'bi ' + s.icon"></i>
+          </a>
+        </div>
+      </div>
+
+      <div *ngFor="let section of sections" class="col-6 col-md">
+        <h6 class="vc-footer-heading">{{ section.title }}</h6>
+        <ul class="list-unstyled mb-0">
+          <li *ngFor="let link of section.links" class="mb-2">
+            <a [href]="link.href" class="vc-footer-link">{{ link.label }}</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    <hr class="vc-footer-divider mt-5 mb-3" />
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+      <p class="vc-copyright mb-0">
+        &copy; {{ currentYear }} {{ brandName }}. Todos los derechos reservados.
+      </p>
+      <p class="vc-copyright mb-0">
+        Hecho con amor para tus mascotas
+      </p>
+    </div>
+  </div>
+</footer>

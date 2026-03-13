@@ -1,0 +1,113 @@
+<div class="vc-pets-page">
+  <div class="container py-5">
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!isLoading && pet">
+
+      <button class="btn vc-btn-back mb-4" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>Volver
+      </button>
+
+      <div class="row gy-4">
+
+        <!-- Left: Pet card -->
+        <div class="col-12 col-lg-4">
+          <div class="vc-detail-card" [ngClass]="speciesColors[pet.species]">
+
+            <div class="vc-detail-img-wrap">
+              <img src="https://www.purina.com/sites/default/files/2025-09/beagle2_red-collar.jpg" [alt]="pet.name" class="vc-detail-img" />
+            </div>
+
+            <div class="vc-detail-body text-center">
+              <h3 class="vc-detail-name">{{ pet.name }}</h3>
+              <span class="vc-detail-species-badge">
+                {{ pet.species | speciesLabel }}
+              </span>
+
+              <hr class="my-3" />
+
+              <div class="vc-info-list text-start">
+                <div class="vc-info-row">
+                  <i class="bi bi-tag"></i>
+                  <span>{{ pet.breed }}</span>
+                </div>
+                <div class="vc-info-row">
+                  <i class="bi bi-clock"></i>
+                  <span>{{ pet.birth_date | petAge }}</span>
+                </div>
+                <div class="vc-info-row">
+                  <i class="bi bi-calendar3"></i>
+                  <span>Nació el {{ pet.birth_date | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+
+              <div class="d-flex flex-column gap-2 mt-4" *ngIf="!isVet">
+                <button class="btn vc-btn-edit-full" (click)="goToEdit()">
+                  <i class="bi bi-pencil me-2"></i>Editar mascota
+                </button>
+                <button class="btn vc-btn-appt" (click)="goToNewAppt()">
+                  <i class="bi bi-calendar-plus me-2"></i>Nueva cita
+                </button>
+                <button class="btn vc-btn-history" (click)="goToHistory()">
+                  <i class="bi bi-clipboard2-pulse me-2"></i>Ver historial
+                </button>
+              </div>
+
+              <div class="d-flex flex-column gap-2 mt-4" *ngIf="isVet">
+                <button class="btn vc-btn-appt" (click)="goToNewAppt()">
+                  <i class="bi bi-calendar-plus me-2"></i>Agendar cita
+                </button>
+                <button class="btn vc-btn-history" (click)="goToHistory()">
+                  <i class="bi bi-clipboard2-pulse me-2"></i>Ver historial
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Appointments -->
+        <div class="col-12 col-lg-8">
+          <div class="vc-panel">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+              <h5 class="vc-panel-title mb-0">
+                <i class="bi bi-calendar2-heart me-2"></i>Historial de citas
+              </h5>
+              <span class="vc-appt-count">{{ appointments.length }} citas</span>
+            </div>
+
+            <div *ngIf="appointments.length === 0" class="text-center py-4">
+              <img src="#" alt="Sin citas" class="vc-empty-img mb-3" />
+              <p class="text-muted mb-0">No hay citas registradas para esta mascota.</p>
+            </div>
+
+            <div
+              *ngFor="let appt of appointments"
+              class="vc-appt-row"
+              [appHighlightUpcoming]="appt.datetime"
+            >
+              <div class="vc-appt-date">
+                <i class="bi bi-calendar3 me-2"></i>
+                {{ appt.datetime | date:'dd/MM/yyyy HH:mm' }}
+              </div>
+              <div class="vc-appt-info">
+                <span class="vc-appt-reason">{{ appt.reason }}</span>
+                <span class="vc-appt-duration">
+                  <i class="bi bi-clock me-1"></i>{{ appt.duration_minutes }} min
+                </span>
+              </div>
+              <span [appStatusBadge]="appt.status" class="vc-appt-status">
+                {{ appt.status | appointmentStatus }}
+              </span>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

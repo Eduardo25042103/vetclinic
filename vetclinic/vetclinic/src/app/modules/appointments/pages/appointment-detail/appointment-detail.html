@@ -1,0 +1,272 @@
+<div class="vc-appts-page">
+  <div class="container py-5">
+
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+    </div>
+
+    <div *ngIf="!isLoading && appointment">
+
+      <button class="btn vc-btn-back mb-4" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>Volver
+      </button>
+
+      <div class="row gy-4">
+
+        <!-- Left: Appointment info -->
+        <div class="col-12 col-lg-5">
+          <div class="vc-detail-card">
+
+            <div class="vc-detail-header">
+              <div class="vc-detail-icon">
+                <i class="bi bi-calendar2-heart"></i>
+              </div>
+              <div>
+                <h4 class="vc-detail-title">{{ appointment.reason }}</h4>
+                <span [appStatusBadge]="appointment.status">
+                  {{ appointment.status | appointmentStatus }}
+                </span>
+              </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <div class="vc-info-list">
+              <div class="vc-info-row">
+                <i class="bi bi-clock"></i>
+                <span>{{ appointment.datetime | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+              <div class="vc-info-row">
+                <i class="bi bi-hourglass-split"></i>
+                <span>{{ appointment.duration_minutes }} minutos</span>
+              </div>
+              <div class="vc-info-row">
+                <i class="bi bi-person-badge"></i>
+                <span>{{ vetName }}</span>
+              </div>
+              <div class="vc-info-row" *ngIf="pet">
+                <i class="bi bi-heart-pulse"></i>
+                <span>{{ pet.name }} · {{ pet.species | speciesLabel }}</span>
+              </div>
+              <div class="vc-info-row" *ngIf="pet">
+                <i class="bi bi-clock-history"></i>
+                <span>{{ pet.birth_date | petAge }}</span>
+              </div>
+            </div>
+
+            <div class="vc-pet-preview mt-3" *ngIf="pet">
+              <img src="https://www.purina.com/sites/default/files/2025-09/beagle2_red-collar.jpg" [alt]="pet.name" class="vc-pet-preview-img" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="col-12 col-lg-7">
+
+          <!-- Status transitions — solo vet -->
+          <div class="vc-panel mb-4" *ngIf="isVet && !showReschedule">
+            <h5 class="vc-panel-title mb-3">
+              <i class="bi bi-arrow-repeat me-2"></i>Cambiar estado
+            </h5>
+            <div class="d-flex flex-wrap gap-2">
+              <button
+                *ngFor="let t of availableTransitions"
+                class="btn vc-transition-btn"
+                [class]="'transition-' + t.value"
+                (click)="changeStatus(t.value)"
+                [disabled]="isSaving"
+              >
+                <i [class]="'bi ' + t.icon + ' me-2'"></i>{{ t.label }}
+              </button>
+              <!-- Reprogramar button for vet -->
+              <button
+                *ngIf="canReschedule"
+                class="btn vc-transition-btn transition-scheduled"
+                (click)="openReschedule()"
+                [disabled]="isSaving"
+              >
+                <i class="bi bi-arrow-repeat me-2"></i>Reprogramar
+              </button>
+            </div>
+          </div>
+
+          <!-- Reprogramar button for owner -->
+          <div class="vc-panel mb-4" *ngIf="!isVet && canReschedule && !showReschedule">
+            <h5 class="vc-panel-title mb-3">
+              <i class="bi bi-calendar-event me-2"></i>Acciones
+            </h5>
+            <button class="btn vc-transition-btn transition-scheduled" (click)="openReschedule()">
+              <i class="bi bi-arrow-repeat me-2"></i>Reprogramar cita
+            </button>
+          </div>
+
+          <!-- ═══ Reschedule Panel ═══ -->
+          <div class="vc-panel mb-4" *ngIf="showReschedule">
+            <h5 class="vc-panel-title mb-1">
+              <i class="bi bi-arrow-repeat me-2"></i>Reprogramar cita
+            </h5>
+            <p class="text-muted small mb-3">Elige una nueva fecha y horario para esta cita.</p>
+
+            <div *ngIf="rescheduleError" class="alert vc-alert-error d-flex align-items-center gap-2 mb-3">
+              <i class="bi bi-exclamation-circle-fill"></i>
+              <span>{{ rescheduleError }}</span>
+            </div>
+
+            <!-- With slot system (vet has availability configured) -->
+            <ng-container *ngIf="!hasFreeSlots">
+
+              <!-- Date -->
+              <div class="mb-3">
+                <label class="vc-label">Nueva fecha</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-calendar3 vc-input-icon"></i>
+                  <input
+                    type="date"
+                    class="form-control vc-input"
+                    [(ngModel)]="rescheduleDate"
+                    name="rescheduleDate"
+                    [min]="minDate"
+                    (ngModelChange)="onRescheduleDateChange()"
+                  />
+                </div>
+              </div>
+
+              <!-- Slots -->
+              <div class="mb-3" *ngIf="rescheduleDate">
+                <label class="vc-label mb-2">Horarios disponibles</label>
+                <p class="text-muted small fst-italic" *ngIf="rescheduleSlots.length === 0">
+                  No hay horarios disponibles para esta fecha. Prueba otro día.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                  <button
+                    *ngFor="let slot of rescheduleSlots"
+                    type="button"
+                    class="btn vc-duration-btn"
+                    [class.selected]="rescheduleSlot === slot"
+                    (click)="rescheduleSlot = slot"
+                  >
+                    {{ slot }}
+                  </button>
+                </div>
+              </div>
+
+            </ng-container>
+
+            <!-- Free datetime (no availability set) -->
+            <ng-container *ngIf="hasFreeSlots">
+              <div class="mb-3">
+                <label class="vc-label">Nueva fecha y hora</label>
+                <div class="vc-input-wrap">
+                  <i class="bi bi-calendar3 vc-input-icon"></i>
+                  <input
+                    type="datetime-local"
+                    class="form-control vc-input"
+                    [(ngModel)]="rescheduleDate"
+                    name="rescheduleDate"
+                    [min]="minDate"
+                  />
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="d-flex gap-2 mt-3">
+              <button class="btn vc-btn-save" (click)="confirmReschedule()" [disabled]="isSaving">
+                <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!isSaving" class="bi bi-check-lg me-2"></i>
+                {{ isSaving ? 'Guardando...' : 'Confirmar reprogramación' }}
+              </button>
+              <button class="btn vc-btn-cancel" (click)="cancelReschedule()">Cancelar</button>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="vc-panel">
+            <h5 class="vc-panel-title mb-3">
+              <i class="bi bi-info-circle me-2"></i>Resumen
+            </h5>
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="vc-summary-item">
+                  <span class="vc-summary-label">Mascota</span>
+                  <span class="vc-summary-value">{{ pet?.name ?? '—' }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="vc-summary-item">
+                  <span class="vc-summary-label">Veterinario</span>
+                  <span class="vc-summary-value">{{ vetName }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="vc-summary-item">
+                  <span class="vc-summary-label">Fecha</span>
+                  <span class="vc-summary-value">{{ appointment.datetime | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="vc-summary-item">
+                  <span class="vc-summary-label">Hora</span>
+                  <span class="vc-summary-value">{{ appointment.datetime | date:'HH:mm' }}</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="vc-summary-item">
+                  <span class="vc-summary-label">Duración</span>
+                  <span class="vc-summary-value">{{ appointment.duration_minutes }} min</span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="vc-summary-item">
+                  <span class="vc-summary-label">Estado</span>
+                  <span class="vc-summary-value">{{ appointment.status | appointmentStatus }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historial médico vinculado -->
+          <div class="vc-panel mt-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <h5 class="vc-panel-title mb-0">
+                <i class="bi bi-clipboard2-pulse me-2"></i>Registro médico
+              </h5>
+              <button *ngIf="isVet" class="btn vc-btn-add btn-sm" (click)="goToMedicalRecord()">
+                <i class="bi bi-{{ medicalRecord ? 'pencil' : 'plus-lg' }} me-1"></i>
+                {{ medicalRecord ? 'Editar' : 'Crear registro' }}
+              </button>
+            </div>
+
+            <div *ngIf="!medicalRecord" class="vc-empty-record text-center py-3">
+              <i class="bi bi-clipboard2 fs-2 text-muted"></i>
+              <p class="text-muted mt-2 mb-0 small">Esta cita aún no tiene registro médico.</p>
+            </div>
+
+            <div *ngIf="medicalRecord" class="vc-record-inline">
+              <div class="row g-3">
+                <div class="col-12 col-sm-4">
+                  <p class="vc-record-label">Diagnóstico</p>
+                  <p class="vc-record-value">{{ medicalRecord.diagnosis }}</p>
+                </div>
+                <div class="col-12 col-sm-4">
+                  <p class="vc-record-label">Tratamiento</p>
+                  <p class="vc-record-value">{{ medicalRecord.treatment }}</p>
+                </div>
+                <div class="col-12 col-sm-4" *ngIf="medicalRecord.notes">
+                  <p class="vc-record-label">Notas</p>
+                  <p class="vc-record-value">{{ medicalRecord.notes }}</p>
+                </div>
+              </div>
+              <p class="vc-record-date mt-2 mb-0">
+                <i class="bi bi-calendar3 me-1"></i>
+                {{ medicalRecord.created_at | date:'dd/MM/yyyy HH:mm' }}
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

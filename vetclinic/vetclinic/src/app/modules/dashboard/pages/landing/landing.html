@@ -1,0 +1,109 @@
+<section class="vc-hero" [class.visible]="isVisible">
+  <div class="vc-hero-bg-paws"></div>
+  <div class="container">
+    <div class="row align-items-center vc-hero-row">
+
+      <!-- Left: Text -->
+      <div class="col-12 col-lg-6 vc-hero-content">
+        <h1 class="vc-hero-title">
+          Atención Veterinaria<br>
+          <span class="vc-hero-title-alt">de confianza</span>
+        </h1>
+        <p class="vc-hero-subtitle">
+          Saludable desde la nariz hasta la cola
+          <i class="bi bi-emoji-smile-fill ms-1 text-warning"></i>
+        </p>
+        <p class="vc-hero-description">
+          Cuidado especializado y la más alta tecnología para tu mascota en un solo lugar.
+          Agenda tu cita en minutos, sin llamadas.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <button class="btn vc-cta-primary" (click)="goToAppointments()" type="button">
+            <i class="bi bi-calendar2-heart me-2"></i>Agenda una consulta
+          </button>
+          <button class="btn vc-cta-secondary" (click)="goToAccount()" type="button">
+            <i class="bi bi-person-circle me-2"></i>Ver mi cuenta
+          </button>
+          <button *ngIf="isLoggedIn" class="btn vc-cta-pets" (click)="goToPets()" type="button">
+            <i class="bi bi-heart-fill me-2"></i>Mis mascotas
+          </button>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          <span *ngFor="let badge of heroBadges" class="vc-badge-feature">
+            <i [class]="'bi ' + badge.icon + ' me-1'"></i>{{ badge.label }}
+          </span>
+        </div>
+
+        <div class="vc-demo-pills mt-4 d-none d-md-flex gap-2 flex-wrap">
+          <span class="vc-pill-demo">
+            <i class="bi bi-tag me-1"></i>{{ demoPetSpecies | speciesLabel }}
+          </span>
+          <span class="vc-pill-demo">
+            <i class="bi bi-clock me-1"></i>Edad: {{ demoPetBirthDate | petAge }}
+          </span>
+          <span class="vc-pill-demo">
+            <i class="bi bi-activity me-1"></i>{{ demoAppointmentStatus | appointmentStatus }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Right: Visual -->
+      <div class="col-12 col-lg-6 vc-hero-visual">
+        <div class="vc-circle-bg">
+          <div class="vc-dog-wrap">
+            <img src="https://www.purina.com/sites/default/files/2025-09/beagle2_red-collar.jpg" alt="Mascota en VetClinic" class="vc-dog-img" />
+          </div>
+
+          <div class="vc-float-card card-top-right" [appHighlightUpcoming]="'2025-03-10T10:00:00'">
+            <span class="vc-float-dot green"></span>
+            <span class="vc-float-text">Próxima cita: Hoy 10:00 AM</span>
+          </div>
+
+          <div class="vc-float-card card-bottom-left">
+            <span class="vc-float-dot blue"></span>
+            <span class="vc-float-text">Luna – Vacuna aplicada ✓</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="vc-stats">
+  <div class="container">
+    <div class="row justify-content-center gy-3">
+      <div *ngFor="let stat of stats" class="col-6 col-md-4 col-lg-3">
+        <div class="vc-stat-card text-center">
+          <div class="vc-stat-icon"><i [class]="'bi ' + stat.icon"></i></div>
+          <div class="vc-stat-value">{{ stat.value }}</div>
+          <div class="vc-stat-label">{{ stat.label }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section class="vc-features py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="vc-section-title">Todo lo que necesita tu mascota</h2>
+      <p class="vc-section-subtitle">Tecnología y cuidado en un solo lugar</p>
+    </div>
+    <div class="row gy-4 justify-content-center">
+      <div *ngFor="let feature of features" class="col-12 col-md-4">
+        <div class="vc-feature-card" [ngClass]="feature.colorClass">
+          <div class="vc-feature-icon-wrap">
+            <i [class]="'bi ' + feature.icon"></i>
+          </div>
+          <h5 class="vc-feature-title">{{ feature.title }}</h5>
+          <p class="vc-feature-desc">{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
